@@ -1,3 +1,12 @@
 FROM node:20
 
-WORKDIR /usr/src/app
+WORKDIR /app
+COPY package*.json ./
+RUN npm install
+
+COPY . .
+
+# Build for production
+RUN npm run build
+
+CMD ["npm", "run", "dev", "--", "--port", "3000", "--host"]

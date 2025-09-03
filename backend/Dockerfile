@@ -1,16 +1,19 @@
-FROM php:8.2-cli
+FROM php:8.2-fpm
 
-# Install dependencies
+# System deps
 RUN apt-get update && apt-get install -y \
-    git unzip libpng-dev libonig-dev libxml2-dev zip curl \
-    && docker-php-ext-install pdo pdo_mysql mbstring exif pcntl bcmath gd
+    libpq-dev libonig-dev libzip-dev zip unzip git curl \
+    && docker-php-ext-install pdo pdo_mysql mbstring zip exif pcntl \
+    && rm -rf /var/lib/apt/lists/*
 
-RUN apt-get update && apt-get install -y netcat-openbsd
+# Install composer
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
-COPY docker/entrypoint.sh /usr/local/bin/entrypoint.sh
-RUN chmod +x /usr/local/bin/entrypoint.sh
+WORKDIR /var/www
+COPY . .
 
-# Install Composer
-COPY --from=composer:2.6 /usr/bin/composer /usr/bin/composer
+# Laravel permissions
+RUN chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache
 
-WORKDIR /var/www/html
+
+CMD ["php-fpm"]
