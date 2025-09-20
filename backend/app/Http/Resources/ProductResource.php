@@ -5,7 +5,7 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class test extends JsonResource
+class ProductResource extends ProductIndexResource
 {
     /**
      * Transform the resource into an array.
@@ -14,6 +14,13 @@ class test extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return parent::toArray($request);
+        return [
+            array_merge(
+                parent::toArray($request),
+                [
+                    'additional Data' => 'to be added'
+                ]
+            )
+        ];
     }
 }

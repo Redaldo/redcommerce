@@ -2,13 +2,13 @@
 
 namespace Database\Factories;
 
-use Illuminate\Support\Str;
+use App\Models\Category;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Category>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Product>
  */
-class CategoryFactory extends Factory
+class ProductFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -20,9 +20,8 @@ class CategoryFactory extends Factory
         return [
             'name' => $name = fake()->unique()->word(),
             'slug' => $name,
-
-
-
+            'description' => fake()->sentence(),
+            'category_id' => Category::factory()->create()
         ];
     }
 }
